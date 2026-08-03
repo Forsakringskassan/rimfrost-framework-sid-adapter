@@ -23,6 +23,12 @@ import se.fk.rimfrost.sid.jaxrsspec.controllers.generatedsource.SidApi;
 
 import java.util.List;
 
+/**
+ * Adapter for querying the SID (Skyddad IDentitet) service.
+ *
+ * <p>Manages a JAX-RS client lifecycle and translates domain model types
+ * to SID API requests, mapping HTTP error responses to typed {@link SidException}s.
+ */
 @SuppressWarnings("unused")
 @ApplicationScoped
 public class SidAdapter
@@ -37,8 +43,11 @@ public class SidAdapter
 
    private Client client;
 
-   Logger LOGGER = LoggerFactory.getLogger(SidAdapter.class);
+   private static final Logger LOGGER = LoggerFactory.getLogger(SidAdapter.class);
 
+   /**
+    * Initialises the JAX-RS client and the proxy to the SID API.
+    */
    @PostConstruct
    public void init()
    {
@@ -48,6 +57,9 @@ public class SidAdapter
       sidClient = WebResourceFactory.newResource(SidApi.class, client.target(sidBaseUrl));
    }
 
+   /**
+    * Closes the JAX-RS client on bean destruction.
+    */
    @PreDestroy
    void destroy()
    {
@@ -60,6 +72,13 @@ public class SidAdapter
       }
    }
 
+   /**
+    * Checks whether any of the given individuals have a protected identity (SID).
+    *
+    * @param individer the individuals to check; must be non-null and non-empty
+    * @return {@code true} if at least one individual has a protected identity
+    * @throws SidException if the SID service returns an error or an unexpected response
+    */
    public boolean containsSid(List<Idtyp> individer) throws SidException
    {
       try
@@ -82,28 +101,28 @@ public class SidAdapter
          var message = "Service path not found while attempting to check SID status";
 
          LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.NOT_FOUND, message);
+         throw new SidException(SidException.ErrorType.NOT_FOUND, message, e);
       }
       catch (BadRequestException e)
       {
          var message = "Request was rejected as a bad request while attempting to check SID status";
 
          LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.BAD_REQUEST, message);
+         throw new SidException(SidException.ErrorType.BAD_REQUEST, message, e);
       }
       catch (ServiceUnavailableException e)
       {
          var message = "Request could not be handled by server";
 
          LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.SERVICE_UNAVAILABLE, message);
+         throw new SidException(SidException.ErrorType.SERVICE_UNAVAILABLE, message, e);
       }
       catch (ProcessingException | WebApplicationException e)
       {
          var message = "An unexpected error occurred while attempting to check SID status";
 
          LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.UNEXPECTED_ERROR, message);
+         throw new SidException(SidException.ErrorType.UNEXPECTED_ERROR, message, e);
       }
    }
 }

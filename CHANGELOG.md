@@ -1,4 +1,4 @@
-# rimfrost-framework-erbjudande-topic-adapter changelog
+# rimfrost-framework-sid-adapter changelog
 
-Changelog of rimfrost-framework-erbjudande-topic-adapter.
+Changelog of rimfrost-framework-sid-adapter.
 
