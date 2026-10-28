@@ -59,8 +59,8 @@
     </dependency>
     <dependency>
       <groupId>se.fk.rimfrost.sid</groupId>
-      <artifactId>rimfrost-service-sid-api-jaxrs-spec</artifactId>
-      <version>0.0.2</version>
+      <artifactId>rimfrost-service-sid-openapi-jaxrs-spec</artifactId>
+      <version>0.0.5</version>
     </dependency>
     <dependency>
       <groupId>org.immutables</groupId>
