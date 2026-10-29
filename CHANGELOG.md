@@ -2,6 +2,21 @@
 
 Changelog of rimfrost-framework-sid-adapter.
 
+## 0.0.2 (2026-10-28)
+
+### Bug Fixes
+
+-  migrate workflows to bundled refs and update sid-openapi-jaxrs-spec ([1ea52](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/1ea52cb995e5737) Ulf Slunga)  
+-  **deps**  update dependency org.immutables:bom to v2.12.3 ([4e0ba](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/4e0bac10d5780b9) renovate[bot])  
+-  **deps**  update dependency io.quarkus:quarkus-bom to v3.40.1 ([e8df8](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/e8df8a7d24d75b6) renovate[bot])  
+
+### Dependency updates
+
+- update forsakringskassan/.github digest to cbd74f1 ([a645d](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/a645db7f369854e) renovate[bot])  
+- update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.16.0 ([91327](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/913276fe4723f21) renovate[bot])  
+- pin forsakringskassan/.github action to bfb01f7 ([451dd](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/451dd9ae74db781) renovate[bot])  
+## rimfrost-1_2 (2026-08-03)
+
 ## 0.0.1 (2026-08-03)
 
 ### Features
