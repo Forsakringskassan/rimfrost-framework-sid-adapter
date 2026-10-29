@@ -2,6 +2,12 @@
 
 Changelog of rimfrost-framework-sid-adapter.
 
+## 0.0.3 (2026-10-29)
+
+### Bug Fixes
+
+-  Bump release version ([77ad8](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/77ad8fdd4cfbc38) Lars Persson)  
+
 ## 0.0.2 (2026-10-28)
 
 ### Bug Fixes
