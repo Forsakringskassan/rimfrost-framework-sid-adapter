@@ -2,6 +2,16 @@
 
 Changelog of rimfrost-framework-sid-adapter.
 
+## 0.0.4 (2026-11-11)
+
+### Bug Fixes
+
+-  Add support for ignoring unknown json properties ([83fc2](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/83fc27b790c0651) Lars Persson)  
+-  **deps**  update dependency io.quarkus:quarkus-bom to v3.40.1.1 ([a9f08](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/a9f08f44d68dcee) renovate[bot])  
+
+### Dependency updates
+
+- update forsakringskassan/.github digest to cbc0db8 ([b8df2](https://github.com/Forsakringskassan/rimfrost-framework-sid-adapter/commit/b8df2f885bc3c2b) renovate[bot])  
 ## 0.0.3 (2026-10-29)
 
 ### Bug Fixes
