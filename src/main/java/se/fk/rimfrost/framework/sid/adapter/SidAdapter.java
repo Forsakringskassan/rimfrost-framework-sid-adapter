@@ -10,10 +10,10 @@ import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.ServiceUnavailableException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,8 @@ public class SidAdapter
    {
       ClientConfig clientConfig = new ClientConfig();
       clientConfig.connectorProvider(new Apache5ConnectorProvider());
-      client = ClientBuilder.newClient(clientConfig);
+      clientConfig.register(AdapterObjectMapperProvider.class);
+      client = JerseyClientBuilder.newClient(clientConfig);
       sidClient = WebResourceFactory.newResource(SidApi.class, client.target(sidBaseUrl));
    }
 
@@ -96,33 +97,43 @@ public class SidAdapter
 
          return response.getSid();
       }
-      catch (NotFoundException e)
-      {
-         var message = "Service path not found while attempting to check SID status";
-
-         LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.NOT_FOUND, message, e);
-      }
-      catch (BadRequestException e)
-      {
-         var message = "Request was rejected as a bad request while attempting to check SID status";
-
-         LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.BAD_REQUEST, message, e);
-      }
-      catch (ServiceUnavailableException e)
-      {
-         var message = "Request could not be handled by server";
-
-         LOGGER.error(message, e);
-         throw new SidException(SidException.ErrorType.SERVICE_UNAVAILABLE, message, e);
-      }
-      catch (ProcessingException | WebApplicationException e)
+      catch (ProcessingException e)
       {
          var message = "An unexpected error occurred while attempting to check SID status";
 
          LOGGER.error(message, e);
          throw new SidException(SidException.ErrorType.UNEXPECTED_ERROR, message, e);
       }
+      catch (WebApplicationException e)
+      {
+         throw toSidException(e);
+      }
+   }
+
+   private SidException toSidException(WebApplicationException ex)
+   {
+      return switch (ex.getResponse().getStatus())
+      {
+         case 404 -> {
+            var message = "Service path not found while attempting to check SID status";
+            LOGGER.error(message, ex);
+            yield new SidException(SidException.ErrorType.NOT_FOUND, message, ex);
+         }
+         case 400 -> {
+            var message = "Request was rejected as a bad request while attempting to check SID status";
+            LOGGER.error(message, ex);
+            yield new SidException(SidException.ErrorType.BAD_REQUEST, message, ex);
+         }
+         case 503 -> {
+            var message = "Request could not be handled by server";
+            LOGGER.error(message, ex);
+            yield new SidException(SidException.ErrorType.SERVICE_UNAVAILABLE, message, ex);
+         }
+         default -> {
+            var message = "An unexpected error occurred while attempting to check SID status";
+            LOGGER.error(message, ex);
+            yield new SidException(SidException.ErrorType.UNEXPECTED_ERROR, message, ex);
+         }
+      };
    }
 }
