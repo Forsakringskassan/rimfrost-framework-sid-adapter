@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -115,6 +116,16 @@ public class SidAdapterTest
    void should_return_expected_status_on_success() throws SidException
    {
       assertTrue(sidAdapter.containsSid(List.of(createIdtyp())));
+   }
+
+   @Test
+   void should_ignore_unknown_properties_on_success() throws SidException
+   {
+      server.stubFor(WireMock.post(WireMock.urlPathEqualTo("/sid/status"))
+            .willReturn(WireMock.aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+                  .withBody("{\"sid\":true,\"unknown-property\":\"some-value\"}")));
+
+      assertDoesNotThrow(() -> sidAdapter.containsSid(List.of(createIdtyp())));
    }
 
    private Idtyp createIdtyp()
